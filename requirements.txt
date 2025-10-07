@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-gdown
-streamlit
-tensorflow
-keras
-=======
-gdown
-streamlit
-tensorflow
-keras
->>>>>>> e3dc8e5e1c34798e4162ad9da04d6511abc04e05
-numpy
+streamlit==1.26.0
+tensorflow==2.13.0
+keras==2.13.1
+numpy==1.25.2
+pillow==10.0.0
+gdown==4.6.4
