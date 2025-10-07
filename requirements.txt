@@ -1,0 +1,5 @@
+gdown
+streamlit
+tensorflow
+keras
+numpy
