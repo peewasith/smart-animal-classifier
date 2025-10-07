@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 gdown
 streamlit
 tensorflow
 keras
+=======
+gdown
+streamlit
+tensorflow
+keras
+>>>>>>> e3dc8e5e1c34798e4162ad9da04d6511abc04e05
 numpy
