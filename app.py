@@ -21,23 +21,23 @@ st.set_page_config(
 os.makedirs("model", exist_ok=True)
 
 # ==============================
-# กำหนด path โมเดล
+# ดาวน์โหลดโมเดลจาก Google Drive หากยังไม่มี
 # ==============================
 model_json_path = "model/model_structure.json"
 model_weights_path = "model/model.weights.h5"
 
-# ==============================
-# ดาวน์โหลดโมเดลจาก Google Drive หากยังไม่มี
-# ==============================
+# ใช้ลิงก์แบบ uc?id= สำหรับ gdown
+JSON_FILE_ID = "1zPDPfB0LKsXZHoog4m_9BRUWVr7HFkHI"
+H5_FILE_ID   = "12Xc4HEky4W68UxyZVDvsBGAkyeR_OyHK"
+
 if not os.path.exists(model_json_path) or not os.path.exists(model_weights_path):
     st.info("กำลังดาวน์โหลดโมเดล กรุณารอสักครู่...")
-    # แก้ FILE_ID เป็น ID ของไฟล์ Google Drive จริง
-    gdown.download("https://drive.google.com/uc?id=1zPDPfB0LKsXZHoog4m_9BRUWVr7HFkHI", model_json_path, quiet=False)
-    gdown.download("https://drive.google.com/uc?id=12Xc4HEky4W68UxyZVDvsBGAkyeR_OyHK", model_weights_path, quiet=False)
+    gdown.download(f"https://drive.google.com/uc?id={JSON_FILE_ID}", model_json_path, quiet=False)
+    gdown.download(f"https://drive.google.com/uc?id={H5_FILE_ID}", model_weights_path, quiet=False)
     st.success("ดาวน์โหลดโมเดลเรียบร้อย!")
 
 # ==============================
-# โหลดโมเดลจาก JSON + Weights
+# โหลดโมเดลจาก structure + weights
 # ==============================
 with open(model_json_path, "r") as f:
     model_structure = f.read()
@@ -45,9 +45,7 @@ with open(model_json_path, "r") as f:
 model = model_from_json(model_structure)
 model.load_weights(model_weights_path)
 
-# ==============================
 # โมเดล VGG16 สำหรับ extract features
-# ==============================
 feature_model = vgg16.VGG16(weights='imagenet', include_top=False, input_shape=(224,224,3))
 
 # ==============================
@@ -56,7 +54,7 @@ feature_model = vgg16.VGG16(weights='imagenet', include_top=False, input_shape=(
 classes = ["นก", "แมว", "สุนัข"]
 
 # ==============================
-# Header UI
+# Header
 # ==============================
 st.markdown("<h1 style='text-align: center; color: #4B0082;'>🐾 ระบบจำแนกสัตว์อัจฉริยะ</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: gray;'>อัปโหลดรูปนก แมว หรือสุนัข ระบบจะทำนายให้ทันที!</p>", unsafe_allow_html=True)
@@ -92,5 +90,5 @@ if uploaded_files:
             confidence = float(results[0][predicted_class])  # convert to float
 
             st.markdown(f"<h3 style='text-align: center; color: #4B0082;'>{predicted_name}</h3>", unsafe_allow_html=True)
-            st.progress(confidence)
+            st.progress(confidence)  # st.progress รองรับ float 0-1
             st.caption(f"ความมั่นใจ: {confidence*100:.2f}%")
